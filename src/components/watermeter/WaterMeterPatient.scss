@@ -1,0 +1,329 @@
+#data-outer {
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+#table-outer {
+  overflow-x: auto;
+  flex: 1 1 auto;
+}
+
+.inline {
+  display: inline;
+}
+
+.tracker-row {
+  height: 30px;
+}
+
+.patient-tracker {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  align-content: stretch;
+}
+
+#patient-data {
+  width: 240px;
+  border-right: 1px solid lightgrey;
+  flex: 0 0 200px;
+
+  .patient-data-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+    border: none;
+    background: rgb(206, 215, 228);
+
+    &:hover {
+      background: rgb(178, 193, 214)
+    }
+
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  #gender-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+
+    .gender-button {
+      margin-left: 5px;
+      margin-right: 5px;
+      border-radius: 10px;
+      padding: 3px 15px 3px 15px;
+      background: rgb(236, 236, 236);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s;
+    }
+
+    .gender-button:hover {
+      box-shadow: 0 0 50px hsla(0, 0, 100, 0.3) inset;
+    }
+
+    .gender-button.male {
+      background: rgb(197, 221, 236);
+    }
+
+    .gender-button.female {
+      background: rgb(236, 218, 231);
+    }
+  }
+}
+
+#tracker {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.first-col-width {
+  width: 140px;
+  background-color: rgb(224, 234, 241);
+}
+
+.col-width {
+  width: 100px;
+  overflow: hidden;
+}
+
+#active-btn {
+  width: 90px;
+}
+
+textarea {
+  min-height: 55px;
+}
+
+#data-button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: stretch;
+}
+
+#data-card-container {
+  width: 100%;
+  height: 68px;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  .data-card {
+    width: 145px;
+    display: inline-block;
+    height: 49px;
+    text-decoration: none !important;
+    padding: 0px 2px 0px 4px;
+    transition: all 0.2s;
+    background-color: #f4f4ff;
+    border-radius: 6px;
+
+    .titles {
+      padding-left:3px;
+      line-height: 30px;
+      height: 23px;
+      .date {
+        font-weight: 700;
+        font-size:1.3em;
+        margin-right:5px;
+      }
+    }
+
+    .badges {
+      padding: 0px;
+    }
+  }
+}
+
+#add-data-btn {
+  padding: 0px;
+  margin-right: 5px;
+  border: none;
+  background: rgb(208, 221, 240);
+
+  &:hover {
+    background: rgb(178, 193, 214)
+  }
+
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.data-card-selected {
+  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.data-card:hover {
+  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.clear-both {
+  display: block;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-non-grow {
+  flex: 0 0;
+}
+
+.flex-grow {
+  flex: 1 0;
+}
+
+.h100 {
+  height: 100%;
+}
+
+.h20 {
+  height: 20%;
+}
+
+.h30 {
+  height: 30%;
+}
+
+.h40 {
+  height: 40%;
+}
+
+.h50 {
+  height: 50%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.w50 {
+  width: 40%;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.sm {
+  font-size: 0.8em;
+}
+
+.lg {
+  font-size: 1.1em;
+}
+
+.text-light-grey {
+  color: rgb(180, 180, 180);
+}
+
+.changed {
+  font-weight: 700
+}
+
+input[type="date"]::-webkit-clear-button,
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
+  display: none;
+}
+
+input.form-control{
+  padding: 4px;
+  text-align: left;
+}
+
+#analysis {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.9em;
+
+  #btn-analysis {
+    width: 100px;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgb(144, 188, 224);
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(120, 166, 219);
+    }
+
+    transition: all 0.2s;
+  }
+}
+
+#chart-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
+  .chart-col-left {
+    flex: 1 0 200px;
+    align-self: center;
+    padding: 0px 5px 0px 5px;
+
+    #growth-chart {
+      .title {
+        font-size: 1.2em;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      #chart-outer {
+        width: 100%;
+        height: 100%;
+      }
+
+      #info {
+        padding-top: 10px;
+        color: hsl(212, 27%, 50%);
+        text-align: center;
+        font-size: 0.8rem;
+        padding-bottom: 10px;
+      }
+    }
+  }
+
+  .chart-col-right {
+    flex: 1 0 200px;
+    padding: 0px 5px 0px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+
+    .chart {
+      text-align: center;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0.6em;
+  height: 0.6em;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgba(225, 225, 225, 0.8);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
