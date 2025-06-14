@@ -1,6 +1,6 @@
 # watermeter
 
->>測試用，[原網址]（https://github.com/david855033/watermeter.git）
+>>測試用，[原網址](https://github.com/david855033/watermeter.git)
 
  
 > A Vue.js project
