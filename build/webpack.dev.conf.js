@@ -7,7 +7,6 @@ const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
@@ -39,7 +38,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
-    quiet: true, // necessary for FriendlyErrorsPlugin
+    quiet: false,
     watchOptions: {
       poll: config.dev.poll,
     }
@@ -79,15 +78,8 @@ module.exports = new Promise((resolve, reject) => {
       // add port to devServer config
       devWebpackConfig.devServer.port = port
 
-      // Add FriendlyErrorsPlugin
-      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
-        compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
-        },
-        onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
-      }))
+      // expose application URL in console
+      console.log(`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`)
 
       resolve(devWebpackConfig)
     }
