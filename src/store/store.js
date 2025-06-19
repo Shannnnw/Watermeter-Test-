@@ -1,8 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-Vue.use(Vuex)
+import { createStore } from 'vuex'
 
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     snapshot: {},
     patientList: [],
