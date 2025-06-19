@@ -4,7 +4,6 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const webpack = require('webpack')
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 function resolve(dir) {
@@ -32,7 +31,6 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     }),
-    new NodePolyfillPlugin(),
     new VueLoaderPlugin(),
   ],
   context: path.resolve(__dirname, '../'),
@@ -49,12 +47,16 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': '@vue/compat',
       '@': resolve('src'),
     },
     fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      util: require.resolve('util/'),
+      buffer: require.resolve('buffer/'),
       fs: false,
-      path: false
+      path: false,
+      zlib: false
     }
   },
   module: {
