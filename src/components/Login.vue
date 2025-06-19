@@ -10,7 +10,8 @@
 
 <script>
 /* eslint-disable */
-import firebase from "firebase";
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
 export default {
   name: "login",
   data: function() {

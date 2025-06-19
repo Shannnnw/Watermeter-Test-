@@ -1,11 +1,16 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/store'
-import firebase from 'firebase'
-Vue.config.productionTip = false
+import { createPinia } from 'pinia'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/database'
+const app = createApp(App)
+app.config.compatConfig = { MODE: 3 }
+app.config.productionTip = false
 
 var config = {
   apiKey: 'AIzaSyC7AXXOqN2kw6eAQxSTmykCgGnnkEnAnWs',
@@ -17,15 +22,9 @@ var config = {
 }
 firebase.initializeApp(config)
 
-let app
-firebase.auth().onAuthStateChanged(function (user) {
-  if (!app) {
-    app = new Vue({
-      el: '#app',
-      store,
-      router,
-      components: { App },
-      template: '<App/>'
-    })
-  }
+firebase.auth().onAuthStateChanged(function () {
+  app.use(router)
+  app.use(store)
+  app.use(createPinia())
+  app.mount('#app')
 })
