@@ -3,7 +3,9 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-const webpack = require('webpack');
+const webpack = require('webpack')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -23,11 +25,15 @@ const createLintingRule = () => ({
 module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jquery: "jQuery",
-      "window.jQuery": "jquery",
-      _: "lodash"
+      $: 'jquery',
+      jquery: 'jQuery',
+      'window.jQuery': 'jquery',
+      _: 'lodash',
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer']
     }),
+    new NodePolyfillPlugin(),
+    new VueLoaderPlugin(),
   ],
   context: path.resolve(__dirname, '../'),
   entry: {
@@ -43,8 +49,12 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      'vue$': '@vue/compat',
       '@': resolve('src'),
+    },
+    fallback: {
+      fs: false,
+      path: false
     }
   },
   module: {
@@ -86,17 +96,7 @@ module.exports = {
       }
     ]
   },
-  node: {
-
-    // prevent webpack from injecting useless setImmediate polyfill because Vue
-    // source contains it (although only uses it if it's native).
-    setImmediate: false,
-    // prevent webpack from injecting mocks to Node native modules
-    // that does not make sense for the client
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty',
-  }
+  // Node polyfills are removed in webpack 5.
+  // Avoid injecting mocks for browser builds.
+  node: false
 }
