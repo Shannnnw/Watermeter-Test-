@@ -9,15 +9,14 @@ const devConfigPromise = require('../../build/webpack.dev.conf')
 
 let server
 
-devConfigPromise.then(devConfig => {
-  const devServerOptions = devConfig.devServer
-  const compiler = webpack(webpackConfig)
-  server = new DevServer(compiler, devServerOptions)
-  const port = devServerOptions.port
-  const host = devServerOptions.host
-  return server.listen(port, host)
-})
-.then(() => {
+devConfigPromise
+  .then((devConfig) => {
+    const devServerOptions = devConfig.devServer
+    const compiler = webpack(webpackConfig)
+    server = new DevServer(devServerOptions, compiler)
+    return server.start()
+  })
+  .then(() => {
   // 2. run the nightwatch test suite against it
   // to run in additional browsers:
   //    1. add an entry in test/e2e/nightwatch.conf.js under "test_settings"
@@ -37,12 +36,14 @@ devConfigPromise.then(devConfig => {
   const runner = spawn('./node_modules/.bin/nightwatch', opts, { stdio: 'inherit' })
 
   runner.on('exit', function (code) {
-    server.close()
-    process.exit(code)
+    server.stopCallback(() => {
+      process.exit(code)
+    })
   })
 
   runner.on('error', function (err) {
-    server.close()
-    throw err
+    server.stopCallback(() => {
+      throw err
+    })
   })
 })
