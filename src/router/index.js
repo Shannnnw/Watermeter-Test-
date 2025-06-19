@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import firebase from 'firebase'
 
 import Welcome from '@/components/Welcome'
@@ -12,9 +11,9 @@ import WaterMeterData from '@/components/watermeter/WaterMeterData'
 
 import StandBy from '@/components/standby/StandBy'
 
-Vue.use(Router)
 
-let router = new Router({
+const router = createRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: '*',
