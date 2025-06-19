@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import Chart from "chart.js";
+import Chart from "chart.js/auto";
 import util from "@/util";
 export default {
   methods: {

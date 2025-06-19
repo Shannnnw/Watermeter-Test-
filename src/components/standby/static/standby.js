@@ -1,6 +1,6 @@
 import $ from "jquery";
 import $$ from "jquery-mousewheel";
-import Chart from 'chart.js';
+import Chart from 'chart.js/auto';
 
 export default {
   name: "StandBy",
