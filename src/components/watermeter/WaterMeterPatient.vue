@@ -156,7 +156,7 @@ import 'firebase/compat/database'
 import util from "@/util";
 import $ from "jquery";
 import $$ from "jquery-mousewheel";
-import Chart from "chart.js";
+import Chart from "chart.js/auto";
 import GrowthChart from "./chart/GrowthChart.vue";
 import VolumeChart from "./chart/VolumeChart.vue";
 
