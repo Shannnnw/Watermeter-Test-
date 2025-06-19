@@ -128,9 +128,9 @@
     <watermeter-table
       class="p-1 flex-grow flex"
       ref="wmtable"
-      v-bind:wm.sync="waterMeterData.wm"
-      v-bind:pn.sync="waterMeterData.pn"
-      v-bind:temp.sync="temp"
+      :wm="waterMeterData.wm"
+      :pn="waterMeterData.pn"
+      :temp="temp"
     > </watermeter-table>
   </div>
 </template>

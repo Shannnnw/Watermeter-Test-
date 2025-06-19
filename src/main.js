@@ -9,7 +9,6 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/database'
 const app = createApp(App)
-app.config.compatConfig = { MODE: 3 }
 app.config.productionTip = false
 
 var config = {
