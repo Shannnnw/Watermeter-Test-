@@ -5,7 +5,9 @@ import App from './App'
 import router from './router'
 import store from './store/store'
 import { createPinia } from 'pinia'
-import firebase from 'firebase'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/database'
 const app = createApp(App)
 app.config.compatConfig = { MODE: 3 }
 app.config.productionTip = false
