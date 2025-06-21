@@ -127,16 +127,20 @@
                         </div>
                         <div>
                             <table>
-                                <tr>
-                                    <th>GA</th>
-                                    <th>Length at lips</th>
-                                    <th>BW</th>
-                                </tr>
-                                <tr v-for="(e,i) in endo" :key="i">
-                                    <td :class="{selected:e.selected[0]}">{{e.ga_lower}}-{{e.ga_upper}}</td>
-                                    <td :class="{selected:e.selected[1]}">{{e.depth.toFixed(1)}}</td>
-                                    <td :class="{selected:e.selected[2]}">{{e.bw_lower.toFixed(1)}}-{{e.bw_upper.toFixed(1)}}</td>
-                                </tr>
+                                <thead>
+                                    <tr>
+                                        <th>GA</th>
+                                        <th>Length at lips</th>
+                                        <th>BW</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(e,i) in endo" :key="i">
+                                        <td :class="{selected:e.selected[0]}">{{e.ga_lower}}-{{e.ga_upper}}</td>
+                                        <td :class="{selected:e.selected[1]}">{{e.depth.toFixed(1)}}</td>
+                                        <td :class="{selected:e.selected[2]}">{{e.bw_lower.toFixed(1)}}-{{e.bw_upper.toFixed(1)}}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
