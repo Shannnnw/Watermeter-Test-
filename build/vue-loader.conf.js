@@ -7,6 +7,10 @@ const sourceMapEnabled = isProduction
   : config.dev.cssSourceMap
 
 module.exports = {
+  // Options for the Vue 3 SFC compiler
+  compilerOptions: {
+    whitespace: 'condense'
+  },
   loaders: utils.cssLoaders({
     sourceMap: sourceMapEnabled,
     extract: isProduction
