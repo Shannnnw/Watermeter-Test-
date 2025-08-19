@@ -25,7 +25,7 @@ jobs:
       - name: Outdated Report
         run: npm outdated || true
       - name: Generate SBOM
-        run: npx cyclonedx-npm -o sbom.json
+        run: npx @cyclonedx/cyclonedx-npm -o sbom.json
       - uses: actions/upload-artifact@v4
         with:
           name: sbom
