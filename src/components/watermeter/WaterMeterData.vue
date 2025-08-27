@@ -143,6 +143,7 @@ import util from "@/util";
 import WaterMeterTable from "./WaterMeterTable";
 import $ from "jquery";
 import { useMainStore } from '@/stores/useMainStore.js'
+import { storeToRefs } from 'pinia'
 let database;
 export default {
   name: "watermeterData",
@@ -151,7 +152,8 @@ export default {
   },
   setup() {
     const store = useMainStore()
-    return { store }
+    const { currentWaterMeterData } = storeToRefs(store)
+    return { store, currentWaterMeterData }
   },
   data: function () {
     return {
@@ -181,7 +183,7 @@ export default {
   methods: {
     loadWaterMeterData() {
       let vm = this;
-      let waterMeterData = vm.store.currentWaterMeterData;
+      let waterMeterData = vm.currentWaterMeterData;
       if (!waterMeterData) {
         return;
       }
