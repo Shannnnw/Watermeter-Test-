@@ -142,11 +142,16 @@ import 'firebase/compat/database'
 import util from "@/util";
 import WaterMeterTable from "./WaterMeterTable";
 import $ from "jquery";
+import { useMainStore } from '@/stores/useMainStore'
 let database;
 export default {
   name: "watermeterData",
   components: {
     "watermeter-table": WaterMeterTable,
+  },
+  setup() {
+    const store = useMainStore()
+    return { store }
   },
   data: function () {
     return {
@@ -176,7 +181,7 @@ export default {
   methods: {
     loadWaterMeterData() {
       let vm = this;
-      let waterMeterData = vm.$store.getters.currentWaterMeterData;
+      let waterMeterData = vm.store.currentWaterMeterData;
       if (!waterMeterData) {
         return;
       }
