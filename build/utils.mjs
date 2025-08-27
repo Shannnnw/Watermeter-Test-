@@ -1,5 +1,5 @@
 import path from 'path';
-import config from '../config/index.js';
+import config from '../config/index.cjs';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import packageConfig from '../package.json' with { type: 'json' };
 import notifier from 'node-notifier';

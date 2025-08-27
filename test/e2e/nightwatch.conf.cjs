@@ -1,11 +1,11 @@
 require('@babel/register')
-var config = require('../../config')
+var config = require('../../config/index.cjs')
 
 // http://nightwatchjs.org/gettingstarted#settings-file
 module.exports = {
-  src_folders: ['test/e2e/specs'],
+  src_folders: ['test/e2e/specs/test.cjs'],
   output_folder: 'test/e2e/reports',
-  custom_assertions_path: ['test/e2e/custom-assertions'],
+  custom_assertions_path: ['test/e2e/custom-assertions/elementCount.cjs'],
 
   selenium: {
     start_process: true,

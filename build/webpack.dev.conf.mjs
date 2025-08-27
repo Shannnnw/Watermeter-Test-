@@ -1,13 +1,13 @@
 import * as utils from './utils.mjs';
 import webpack from 'webpack';
-import config from '../config/index.js';
+import config from '../config/index.cjs';
 import { merge } from 'webpack-merge';
 import path from 'path';
 import baseWebpackConfig from './webpack.base.conf.mjs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import portfinder from 'portfinder';
-import devEnv from '../config/dev.env.js';
+import devEnv from '../config/dev.env.cjs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +23,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
 
-  // these devServer options should be customized in /config/index.js
+  // these devServer options should be customized in /config/index.cjs
   devServer: {
     historyApiFallback: true,
     hot: true,

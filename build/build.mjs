@@ -5,7 +5,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 import checkVersions from './check-versions.mjs';
-import config from '../config/index.js';
+import config from '../config/index.cjs';
 import webpackConfig from './webpack.prod.conf.mjs';
 
 checkVersions();

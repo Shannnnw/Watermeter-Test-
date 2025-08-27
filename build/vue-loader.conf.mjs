@@ -1,5 +1,5 @@
 import * as utils from './utils.mjs';
-import config from '../config/index.js';
+import config from '../config/index.cjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const sourceMapEnabled = isProduction

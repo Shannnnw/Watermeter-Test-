@@ -142,7 +142,7 @@ import 'firebase/compat/database'
 import util from "@/util";
 import WaterMeterTable from "./WaterMeterTable";
 import $ from "jquery";
-import { useMainStore } from '@/stores/useMainStore'
+import { useMainStore } from '@/stores/useMainStore.js'
 let database;
 export default {
   name: "watermeterData",

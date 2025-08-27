@@ -1,6 +1,6 @@
 import path from 'path';
 import * as utils from './utils.mjs';
-import config from '../config/index.js';
+import config from '../config/index.cjs';
 import vueLoaderConfig from './vue-loader.conf.mjs';
 import webpack from 'webpack';
 import { VueLoaderPlugin } from 'vue-loader';
@@ -64,6 +64,7 @@ export default {
       path: false,
       zlib: false,
     },
+    fullySpecified: false,
   },
   module: {
     rules: [
