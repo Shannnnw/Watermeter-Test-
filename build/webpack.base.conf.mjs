@@ -64,6 +64,7 @@ export default {
       path: false,
       zlib: false,
     },
+    fullySpecified: false,
   },
   module: {
     rules: [

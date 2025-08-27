@@ -98,7 +98,7 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/database'
 import util from "@/util.js";
-import { useMainStore } from '@/stores/useMainStore'
+import { useMainStore } from '@/stores/useMainStore.js'
 let database;
 export default {
   name: "waterMeter",

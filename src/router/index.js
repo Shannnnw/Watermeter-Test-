@@ -2,15 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 
-import Welcome from '@/components/Welcome'
-import Login from '@/components/Login'
-import SignUp from '@/components/SignUp'
+import Welcome from '@/components/Welcome.vue'
+import Login from '@/components/Login.vue'
+import SignUp from '@/components/SignUp.vue'
 
-import WaterMeter from '@/components/watermeter/WaterMeter'
-import WaterMeterPatient from '@/components/watermeter/WaterMeterPatient'
-import WaterMeterData from '@/components/watermeter/WaterMeterData'
+import WaterMeter from '@/components/watermeter/WaterMeter.vue'
+import WaterMeterPatient from '@/components/watermeter/WaterMeterPatient.vue'
+import WaterMeterData from '@/components/watermeter/WaterMeterData.vue'
 
-import StandBy from '@/components/standby/StandBy'
+import StandBy from '@/components/standby/StandBy.vue'
 
 
 const router = createRouter({
