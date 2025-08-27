@@ -1,20 +1,24 @@
-'use strict'
-const utils = require('./utils')
-const webpack = require('webpack')
-const config = require('../config')
-const { merge } = require('webpack-merge')
-const path = require('path')
-const baseWebpackConfig = require('./webpack.base.conf')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const portfinder = require('portfinder')
+import * as utils from './utils.mjs';
+import webpack from 'webpack';
+import config from '../config/index.js';
+import { merge } from 'webpack-merge';
+import path from 'path';
+import baseWebpackConfig from './webpack.base.conf.mjs';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import portfinder from 'portfinder';
+import devEnv from '../config/dev.env.js';
+import { fileURLToPath } from 'url';
 
-const HOST = process.env.HOST
-const PORT = process.env.PORT && Number(process.env.PORT)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const HOST = process.env.HOST;
+const PORT = process.env.PORT && Number(process.env.PORT);
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }),
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
@@ -32,13 +36,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       logging: 'warn',
       overlay: config.dev.errorOverlay
         ? { warnings: false, errors: true }
-        : false
+        : false,
     },
-    allowedHosts: 'all'
+    allowedHosts: 'all',
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
+      'process.env': devEnv,
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
@@ -46,7 +50,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
-      inject: true
+      inject: true,
     }),
     // copy custom static assets
     new CopyWebpackPlugin({
@@ -54,28 +58,28 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         {
           from: path.resolve(__dirname, '../static'),
           to: config.dev.assetsSubDirectory,
-          globOptions: { ignore: ['.*'] }
-        }
-      ]
-    })
-  ]
-})
+          globOptions: { ignore: ['.*'] },
+        },
+      ],
+    }),
+  ],
+});
 
-module.exports = new Promise((resolve, reject) => {
-  portfinder.basePort = process.env.PORT || config.dev.port
+export default new Promise((resolve, reject) => {
+  portfinder.basePort = process.env.PORT || config.dev.port;
   portfinder.getPort((err, port) => {
     if (err) {
-      reject(err)
+      reject(err);
     } else {
       // publish the new Port, necessary for e2e tests
-      process.env.PORT = port
+      process.env.PORT = port;
       // add port to devServer config
-      devWebpackConfig.devServer.port = port
+      devWebpackConfig.devServer.port = port;
 
       // expose application URL in console
-      console.log(`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`)
+      console.log(`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`);
 
-      resolve(devWebpackConfig)
+      resolve(devWebpackConfig);
     }
-  })
-})
+  });
+});

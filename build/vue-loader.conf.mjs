@@ -1,12 +1,12 @@
-'use strict'
-const utils = require('./utils')
-const config = require('../config')
-const isProduction = process.env.NODE_ENV === 'production'
+import * as utils from './utils.mjs';
+import config from '../config/index.js';
+
+const isProduction = process.env.NODE_ENV === 'production';
 const sourceMapEnabled = isProduction
   ? config.build.productionSourceMap
-  : config.dev.cssSourceMap
+  : config.dev.cssSourceMap;
 
-module.exports = {
+export default {
   // Options for the Vue 3 SFC compiler
   compilerOptions: {
     whitespace: 'condense'
@@ -23,4 +23,4 @@ module.exports = {
     img: 'src',
     image: 'xlink:href'
   }
-}
+};
