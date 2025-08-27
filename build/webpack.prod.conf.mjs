@@ -1,7 +1,7 @@
 import path from 'path';
 import * as utils from './utils.mjs';
 import webpack from 'webpack';
-import config from '../config/index.js';
+import config from '../config/index.cjs';
 import { merge } from 'webpack-merge';
 import baseWebpackConfig from './webpack.base.conf.mjs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -9,8 +9,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import testEnv from '../config/test.env.js';
-import prodEnv from '../config/prod.env.js';
+import testEnv from '../config/test.env.cjs';
+import prodEnv from '../config/prod.env.cjs';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { fileURLToPath } from 'url';
 
