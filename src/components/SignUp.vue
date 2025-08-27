@@ -8,32 +8,27 @@
 </div>
 </template>
 
-<script>
+<script setup>
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-export default {
-  name: 'signup',
-  data: function () {
-    return {
-      email: '',
-      password: ''
+import { ref } from 'vue'
+
+const email = ref('')
+const password = ref('')
+
+function signUp() {
+  firebase.auth().createUserWithEmailAndPassword(email.value, password.value).then(
+    () => {
+      console.log('accout created')
+    },
+    err => {
+      console.log('err', err)
     }
-  },
-  methods: {
-    signUp: function () {
-      firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
-        function (user) {
-          console.log('accout created')
-        },
-        function (err) {
-          console.log('err', err)
-        }
-      )
-    }
-  }
+  )
 }
 </script>
 
 <style scoped>
 
 </style>
+
