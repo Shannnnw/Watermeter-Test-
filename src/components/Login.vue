@@ -8,35 +8,30 @@
   </div>
 </template>
 
-<script>
-/* eslint-disable */
+<script setup>
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-export default {
-  name: "login",
-  data: function() {
-    return {
-      email: "",
-      password: ""
-    };
-  },
-  methods: {
-    signIn: function() {
-      let email = this.email + "@gmail.com";
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, this.password)
-        .then(
-          user => {
-            this.$router.replace("watermeter");
-          },
-          function(err) {
-            console.log("err", err);
-          }
-        );
-    }
-  }
-};
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const email = ref('')
+const password = ref('')
+
+function signIn() {
+  const mail = email.value + '@gmail.com'
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(mail, password.value)
+    .then(
+      () => {
+        router.replace('watermeter')
+      },
+      err => {
+        console.log('err', err)
+      }
+    )
+}
 </script>
 
 <style scoped>
@@ -45,3 +40,4 @@ export default {
   text-align: center;
 }
 </style>
+
