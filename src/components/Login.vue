@@ -9,8 +9,7 @@
 </template>
 
 <script setup>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -20,9 +19,8 @@ const password = ref('')
 
 function signIn() {
   const mail = email.value + '@gmail.com'
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(mail, password.value)
+  const auth = getAuth()
+  signInWithEmailAndPassword(auth, mail, password.value)
     .then(
       () => {
         router.replace('watermeter')

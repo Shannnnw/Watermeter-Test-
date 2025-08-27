@@ -136,9 +136,8 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/database'
+import { getAuth } from 'firebase/auth'
+import { getDatabase, ref, update, push } from 'firebase/database'
 import util from "@/util";
 import WaterMeterTable from "./WaterMeterTable";
 import $ from "jquery";
@@ -208,14 +207,15 @@ export default {
     },
     save() {
       let vm = this;
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if (currentUser == "phar.vghtpe") {
         alert("您的帳號無儲存/修改權限!");
         return;
       }
-      database = firebase.database();
+      database = getDatabase();
 
-      let saveRef = database.ref(
+      let saveRef = ref(
+        database,
         "/watermeter/" +
           this.$route.params.pkey +
           "/watermeterData/" +
@@ -226,7 +226,7 @@ export default {
       waterMeterData.wm.continuousVolume = vm.temp.continuousVolume;
       waterMeterData.wm.bolusVolume = vm.temp.bolusVolume;
 
-      saveRef.update({
+      update(saveRef, {
         date: waterMeterData.date,
         bw: waterMeterData.bw,
         bw_measure: waterMeterData.bw_measure,
@@ -258,13 +258,14 @@ export default {
     },
     copyData() {
       let vm = this;
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if (currentUser == "phar.vghtpe") {
         alert("您的帳號無儲存/修改權限!");
         return;
       }
-      database = firebase.database();
-      let PatientRef = database.ref(
+      database = getDatabase();
+      let PatientRef = ref(
+        database,
         "/watermeter/" + vm.$route.params.pkey + "/watermeterData/"
       );
 
@@ -272,7 +273,7 @@ export default {
       newInstance.updateBy = currentUser;
       newInstance.date = util.getToday();
       newInstance.lastUpdate = util.getNow();
-      let newID = PatientRef.push(newInstance);
+      let newID = push(PatientRef, newInstance);
       vm.$router.replace(newID.key);
     },
     returnPatient() {

@@ -9,15 +9,15 @@
 </template>
 
 <script setup>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { ref } from 'vue'
 
 const email = ref('')
 const password = ref('')
 
 function signUp() {
-  firebase.auth().createUserWithEmailAndPassword(email.value, password.value).then(
+  const auth = getAuth()
+  createUserWithEmailAndPassword(auth, email.value, password.value).then(
     () => {
       console.log('accout created')
     },

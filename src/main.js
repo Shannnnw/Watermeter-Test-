@@ -4,9 +4,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index.js'
 import { createPinia } from 'pinia'
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/database'
+import { initializeApp } from 'firebase/app'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getDatabase } from 'firebase/database'
 const app = createApp(App)
 app.config.productionTip = false
 
@@ -18,9 +18,11 @@ var config = {
   storageBucket: '',
   messagingSenderId: '587122751148'
 }
-firebase.initializeApp(config)
+initializeApp(config)
+const auth = getAuth()
+getDatabase()
 
-firebase.auth().onAuthStateChanged(function () {
+onAuthStateChanged(auth, function () {
   app.use(router)
   app.use(createPinia())
   app.mount('#app')

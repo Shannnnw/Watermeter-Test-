@@ -150,9 +150,8 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/database'
+import { getAuth } from 'firebase/auth'
+import { getDatabase, ref, push, remove, update } from 'firebase/database'
 import util from "@/util";
 import $ from "jquery";
 import $$ from "jquery-mousewheel";
@@ -201,16 +200,17 @@ export default {
   methods: {
     addData: function() {
       let vm = this;
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if(currentUser=="phar.vghtpe"){
         alert("您的帳號無儲存/修改權限!")
         return 
       }
-      database = firebase.database();
-      let PatientRef = database.ref(
+      database = getDatabase();
+      let PatientRef = ref(
+        database,
         "/watermeter/" + vm.$route.params.pkey + "/watermeterData/"
       );
-      let dkey = PatientRef.push({
+      let dkey = push(PatientRef, {
         //初始WM資料
         bw: "",
         bw_measure: "",
@@ -281,7 +281,7 @@ export default {
       vm.savePatientData();
     },
     deleteData: function(dkey) {
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if(currentUser=="phar.vghtpe"){
         alert("您的帳號無儲存/修改權限!")
         return 
@@ -289,15 +289,16 @@ export default {
       let vm = this;
       let r = confirm("確定要刪除此筆水表(無法復原)?");
       if (r == true) {
-        database = firebase.database();
-        let deleteRef = database.ref(
+        database = getDatabase();
+        let deleteRef = ref(
+          database,
           "/watermeter/" +
             this.$route.params.pkey +
             "/watermeterData/" +
             dkey +
             "/"
         );
-        deleteRef.remove();
+        remove(deleteRef);
       }
     },
     loadPatientData: function() {
@@ -328,15 +329,15 @@ export default {
     },
     savePatientData: function() {
       let vm = this;
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if(currentUser=="phar.vghtpe"){
         alert("您的帳號無儲存/修改權限!")
         return 
       }
-      database = firebase.database();
-      let saveRef = database.ref("/watermeter/" + this.$route.params.pkey);
+      database = getDatabase();
+      let saveRef = ref(database, "/watermeter/" + this.$route.params.pkey);
       let patientData = vm.patientData;
-      saveRef.update({
+      update(saveRef, {
         bedno: patientData.bedno,
         hisid: patientData.hisid,
         name: patientData.name,
