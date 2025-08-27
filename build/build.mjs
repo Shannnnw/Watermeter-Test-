@@ -4,9 +4,9 @@ import { rimrafSync } from 'rimraf';
 import path from 'path';
 import webpack from 'webpack';
 
-import checkVersions from './check-versions.js';
+import checkVersions from './check-versions.mjs';
 import config from '../config/index.js';
-import webpackConfig from './webpack.prod.conf.js';
+import webpackConfig from './webpack.prod.conf.mjs';
 
 checkVersions();
 
