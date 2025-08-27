@@ -22,8 +22,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
   name: "App",
   data: function() {
@@ -42,12 +41,10 @@ export default {
   methods: {
     logout: function() {
       let vm = this;
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.replace("/login");
-        });
+      const auth = getAuth()
+      signOut(auth).then(() => {
+        this.$router.replace("/login");
+      })
     },
     checkAuth: function(user) {
       let vm = this;
@@ -62,10 +59,11 @@ export default {
   },
   mounted: function() {
     let vm = this;
-    vm.checkAuth(firebase.auth().currentUser);
-    firebase.auth().onAuthStateChanged(function(user) {
-      vm.checkAuth(user);
-    });
+    const auth = getAuth()
+    vm.checkAuth(auth.currentUser)
+    onAuthStateChanged(auth, function(user) {
+      vm.checkAuth(user)
+    })
     vm.colorStyle = vm.$route.path.split("/")[1];
   }
 };

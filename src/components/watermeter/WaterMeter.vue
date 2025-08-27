@@ -94,9 +94,8 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/database'
+import { getAuth } from 'firebase/auth'
+import { getDatabase, ref, push, remove, get, onValue } from 'firebase/database'
 import util from "@/util.js";
 import { useMainStore } from '@/stores/useMainStore.js'
 let database;
@@ -123,13 +122,13 @@ export default {
   methods: {
     addPatient: function() {
       let vm = this;
-      let waterMeterRef = database.ref("/watermeter/");
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let waterMeterRef = ref(database, "/watermeter/");
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if(currentUser=="phar.vghtpe"){
         alert("您的帳號無儲存/修改權限!")
         return 
       }
-      waterMeterRef.push({
+      push(waterMeterRef, {
         hisid: "",
         name: "新病人",
         bedno: "",
@@ -144,19 +143,19 @@ export default {
       });
     },
     deletePatient: function(pkey) {
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if(currentUser=="phar.vghtpe"){
         alert("您的帳號無儲存/修改權限!")
         return 
       }
       let r = confirm("確定要刪除此病人資料?(無法復原)");
       if (r == true) {
-        let patientRef = database.ref("/watermeter/" + pkey + "/");
-        patientRef.remove();
+        let patientRef = ref(database, "/watermeter/" + pkey + "/");
+        remove(patientRef);
       }
     },
     storePatient: function(patient) {
-      let currentUser = firebase.auth().currentUser.email.split("@")[0];
+      let currentUser = getAuth().currentUser.email.split("@")[0];
       if(currentUser=="phar.vghtpe"){
         alert("您的帳號無儲存/修改權限!")
         return 
@@ -165,9 +164,9 @@ export default {
       if (!patient.hisid && patient.name == "新病人") {
         let r = confirm("未輸入姓名及病歷號資訊，資料將會直接刪除");
         if (r == true) {
-          let patientRef = database.ref("/watermeter/" + pkey + "/");
-          patientRef.once("value", function(snapshot) {
-            patientRef.remove();
+          let patientRef = ref(database, "/watermeter/" + pkey + "/");
+          get(patientRef).then(function(snapshot) {
+            remove(patientRef);
           });
         }
         return;
@@ -176,13 +175,13 @@ export default {
         "確定要封存此病人資料?(要調閱封存後之資料須請管理員執行)"
       );
       if (r == true) {
-        let patientRef = database.ref("/watermeter/" + pkey + "/");
-        let storeRef = database.ref("/watermeter_store/");
-        patientRef.once("value", function(snapshot) {
+        let patientRef = ref(database, "/watermeter/" + pkey + "/");
+        let storeRef = ref(database, "/watermeter_store/");
+        get(patientRef).then(function(snapshot) {
           let obj = snapshot.val();
           obj.deleteDate = util.getNow();
-          storeRef.push(obj);
-          patientRef.remove();
+          push(storeRef, obj);
+          remove(patientRef);
         });
       }
     },
@@ -249,9 +248,9 @@ export default {
   mounted() {
     let vm = this;
     vm.setRoute(vm.$route);
-    database = firebase.database();
-    let waterMeterRef = database.ref("/watermeter/");
-    waterMeterRef.on("value", function(snapshot) {
+    database = getDatabase();
+    let waterMeterRef = ref(database, "/watermeter/");
+    onValue(waterMeterRef, function(snapshot) {
       vm.store.setSnapshot(snapshot.val());
     });
   }
