@@ -159,6 +159,7 @@ import $$ from "jquery-mousewheel";
 import Chart from "chart.js/auto";
 import GrowthChart from "./chart/GrowthChart.vue";
 import VolumeChart from "./chart/VolumeChart.vue";
+import { useMainStore } from '@/stores/useMainStore'
 
 let database;
 export default {
@@ -168,6 +169,10 @@ export default {
     VolumeChart
   },
   props: { showchart: Boolean },
+  setup() {
+    const store = useMainStore()
+    return { store }
+  },
   data: function() {
     return {
       // isChartShow: true,
@@ -297,7 +302,7 @@ export default {
     },
     loadPatientData: function() {
       let vm = this;
-      let patient = this.$store.getters.currentPatient;
+      let patient = this.store.currentPatient;
       if (!patient) {
         return;
       }
@@ -437,7 +442,10 @@ export default {
       );
     },
     dkeyExist: function() {
-      return this.$store.getters.dkeyExist;
+      return this.store.dkeyExist;
+    },
+    currentPatient() {
+      return this.store.currentPatient;
     },
     isChartShow: {
       get() {
@@ -452,7 +460,7 @@ export default {
     $route() {
       this.loadPatientData();
     },
-    "$store.getters.currentPatient"() {
+    currentPatient() {
       if (!this.dataChanged) {
         this.loadPatientData();
       }

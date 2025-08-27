@@ -98,9 +98,14 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/database'
 import util from "@/util.js";
+import { useMainStore } from '@/stores/useMainStore'
 let database;
 export default {
   name: "waterMeter",
+  setup() {
+    const store = useMainStore()
+    return { store }
+  },
   data() {
     return {
       searchPatient: "",
@@ -109,10 +114,10 @@ export default {
   },
   computed: {
     patientList: function() {
-      return this.$store.state.patientList;
+      return this.store.patientList;
     },
     pkeyExist: function() {
-      return this.$store.getters.pkeyExist;
+      return this.store.pkeyExist;
     }
   },
   methods: {
@@ -183,7 +188,7 @@ export default {
     },
     setRoute(route) {
       let vm = this;
-      vm.$store.commit("setRoute", route);
+      vm.store.setRoute(route);
     },
     parseUpdate(inputDateTime) {
       let split = inputDateTime.split(" ");
@@ -247,7 +252,7 @@ export default {
     database = firebase.database();
     let waterMeterRef = database.ref("/watermeter/");
     waterMeterRef.on("value", function(snapshot) {
-      vm.$store.commit("setSnapshot", snapshot.val());
+      vm.store.setSnapshot(snapshot.val());
     });
   }
 };

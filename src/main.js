@@ -3,7 +3,6 @@
 import { createApp } from 'vue'
 import App from './App'
 import router from './router'
-import store from './store/store'
 import { createPinia } from 'pinia'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
@@ -23,7 +22,6 @@ firebase.initializeApp(config)
 
 firebase.auth().onAuthStateChanged(function () {
   app.use(router)
-  app.use(store)
   app.use(createPinia())
   app.mount('#app')
 })
