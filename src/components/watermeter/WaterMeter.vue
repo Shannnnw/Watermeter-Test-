@@ -136,19 +136,6 @@ function addPatient() {
   })
 }
 
-function deletePatient(pkey) {
-  const currentUser = firebase.auth().currentUser.email.split('@')[0]
-  if (currentUser == 'phar.vghtpe') {
-    alert('您的帳號無儲存/修改權限!')
-    return
-  }
-  const r = confirm('確定要刪除此病人資料?(無法復原)')
-  if (r == true) {
-    const patientRef = database.ref('/watermeter/' + pkey + '/')
-    patientRef.remove()
-  }
-}
-
 function storePatient(patient) {
   const currentUser = firebase.auth().currentUser.email.split('@')[0]
   if (currentUser == 'phar.vghtpe') {
@@ -210,7 +197,6 @@ function condition(patientData) {
   wm = wm && wm[0] && wm[0].wm
   if (wm && wm.bw) {
     const feed_daily = wm.feed_total / (wm.bw / 1000 + 0.0001)
-    const daily = wm.wm_summary_daily
     const propotion = feed_daily / 100
     if (propotion < 0.2) {
       return 'condition-warn-1'
