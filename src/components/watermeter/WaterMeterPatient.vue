@@ -159,6 +159,7 @@ import Chart from "chart.js/auto";
 import GrowthChart from "./chart/GrowthChart.vue";
 import VolumeChart from "./chart/VolumeChart.vue";
 import { useMainStore } from '@/stores/useMainStore.js'
+import { storeToRefs } from 'pinia'
 
 let database;
 export default {
@@ -170,7 +171,8 @@ export default {
   props: { showchart: Boolean },
   setup() {
     const store = useMainStore()
-    return { store }
+    const { dkeyExist, currentPatient } = storeToRefs(store)
+    return { store, dkeyExist, currentPatient }
   },
   data: function() {
     return {
@@ -303,7 +305,7 @@ export default {
     },
     loadPatientData: function() {
       let vm = this;
-      let patient = this.store.currentPatient;
+      let patient = this.currentPatient;
       if (!patient) {
         return;
       }
@@ -441,12 +443,6 @@ export default {
         patientImage.ga_day != patientData.ga_day ||
         patientImage.active != patientData.active
       );
-    },
-    dkeyExist: function() {
-      return this.store.dkeyExist;
-    },
-    currentPatient() {
-      return this.store.currentPatient;
     },
     isChartShow: {
       get() {

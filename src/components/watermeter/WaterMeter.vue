@@ -93,168 +93,164 @@
   </div>
 </template>
 
-<script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { getAuth } from 'firebase/auth'
-import { getDatabase, ref, push, remove, get, onValue } from 'firebase/database'
-import util from "@/util.js";
+import { getDatabase, ref as dbRef, push, remove, get, onValue } from 'firebase/database'
+import util from '@/util.js'
 import { useMainStore } from '@/stores/useMainStore.js'
-let database;
-export default {
-  name: "waterMeter",
-  setup() {
-    const store = useMainStore()
-    return { store }
-  },
-  data() {
-    return {
-      searchPatient: "",
-      showchart: true
-    };
-  },
-  computed: {
-    patientList: function() {
-      return this.store.patientList;
-    },
-    pkeyExist: function() {
-      return this.store.pkeyExist;
-    }
-  },
-  methods: {
-    addPatient: function() {
-      let vm = this;
-      let waterMeterRef = ref(database, "/watermeter/");
-      let currentUser = getAuth().currentUser.email.split("@")[0];
-      if(currentUser=="phar.vghtpe"){
-        alert("您的帳號無儲存/修改權限!")
-        return 
-      }
-      push(waterMeterRef, {
-        hisid: "",
-        name: "新病人",
-        bedno: "",
-        gender: "",
-        active: true,
-        birthdate: util.getToday(),
-        ga_week: "",
-        ga_day: 0,
-        lastUpdate: util.getNow(),
-        updateBy: currentUser,
-        watermeter: []
-      });
-    },
-    deletePatient: function(pkey) {
-      let currentUser = getAuth().currentUser.email.split("@")[0];
-      if(currentUser=="phar.vghtpe"){
-        alert("您的帳號無儲存/修改權限!")
-        return 
-      }
-      let r = confirm("確定要刪除此病人資料?(無法復原)");
-      if (r == true) {
-        let patientRef = ref(database, "/watermeter/" + pkey + "/");
-        remove(patientRef);
-      }
-    },
-    storePatient: function(patient) {
-      let currentUser = getAuth().currentUser.email.split("@")[0];
-      if(currentUser=="phar.vghtpe"){
-        alert("您的帳號無儲存/修改權限!")
-        return 
-      }
-      let pkey = patient.pkey;
-      if (!patient.hisid && patient.name == "新病人") {
-        let r = confirm("未輸入姓名及病歷號資訊，資料將會直接刪除");
-        if (r == true) {
-          let patientRef = ref(database, "/watermeter/" + pkey + "/");
-          get(patientRef).then(function(snapshot) {
-            remove(patientRef);
-          });
-        }
-        return;
-      }
-      let r = confirm(
-        "確定要封存此病人資料?(要調閱封存後之資料須請管理員執行)"
-      );
-      if (r == true) {
-        let patientRef = ref(database, "/watermeter/" + pkey + "/");
-        let storeRef = ref(database, "/watermeter_store/");
-        get(patientRef).then(function(snapshot) {
-          let obj = snapshot.val();
-          obj.deleteDate = util.getNow();
-          push(storeRef, obj);
-          remove(patientRef);
-        });
-      }
-    },
-    setRoute(route) {
-      let vm = this;
-      vm.store.setRoute(route);
-    },
-    parseUpdate(inputDateTime) {
-      let split = inputDateTime.split(" ");
-      let date = split[0].split("-").map(x => Number(x));
-      date.splice(0, 1);
-      date = date.join("/");
-      let time = split[1].split(":");
-      time.splice(2, 1);
-      time = time.join(":");
-      return date + " " + time;
-    },
-    parseSelected(input) {
-      return input.pkey == this.$route.params.pkey;
-    },
-    getCGA(patientData) {
-      let cga = util.getCGA(
-        util.getNow(),
-        patientData.birthdate,
-        patientData.ga_week,
-        patientData.ga_day
-      );
-      if (!cga) return "";
-      return patientData.ga_week + "+" + patientData.ga_day + " > " + cga;
-    },
-    condition(patientData) {
-      let wm = patientData.watermeterData;
-      wm = wm && wm[0] && wm[0].wm;
-      if (wm && wm.bw) {
-        let feed_daily = wm.feed_total / (wm.bw / 1000 + 0.0001);
-        let daily = wm.wm_summary_daily;
-        let propotion = feed_daily / 100;
-        if (propotion < 0.2) {
-          return "condition-warn-1";
-        } else if (propotion < 0.4) {
-          return "condition-warn-2";
-        } else if (propotion < 0.6) {
-          return "condition-warn-3";
-        } else if (propotion < 0.8) {
-          return "condition-warn-4";
-        } else {
-          return "condition-warn-5";
-        }
-      }
-      return "condition-none";
-    }
-  },
-  beforeRouteUpdate(to, from, next) {
-    let vm = this;
-    vm.setRoute(to);
-    if (to.params.pkey && vm.patientList.find(x => x.pkey == to.params.pkey)) {
-      next();
-    } else if (!to.params.pkey) {
-      next();
-    } else {
-      next("/watermeter");
-    }
-  },
-  mounted() {
-    let vm = this;
-    vm.setRoute(vm.$route);
-    database = getDatabase();
-    let waterMeterRef = ref(database, "/watermeter/");
-    onValue(waterMeterRef, function(snapshot) {
-      vm.store.setSnapshot(snapshot.val());
-    });
+import { storeToRefs } from 'pinia'
+
+let database
+
+defineOptions({ name: 'waterMeter' })
+
+const store = useMainStore()
+const { patientList, pkeyExist } = storeToRefs(store)
+
+const searchPatient = ref('')
+const showchart = ref(true)
+
+const route = useRoute()
+
+function addPatient() {
+  let waterMeterRef = dbRef(database, '/watermeter/')
+  let currentUser = getAuth().currentUser.email.split('@')[0]
+  if (currentUser == 'phar.vghtpe') {
+    alert('您的帳號無儲存/修改權限!')
+    return
   }
-};
+  push(waterMeterRef, {
+    hisid: '',
+    name: '新病人',
+    bedno: '',
+    gender: '',
+    active: true,
+    birthdate: util.getToday(),
+    ga_week: '',
+    ga_day: 0,
+    lastUpdate: util.getNow(),
+    updateBy: currentUser,
+    watermeter: []
+  })
+}
+
+function deletePatient(pkey) {
+  let currentUser = getAuth().currentUser.email.split('@')[0]
+  if (currentUser == 'phar.vghtpe') {
+    alert('您的帳號無儲存/修改權限!')
+    return
+  }
+  let r = confirm('確定要刪除此病人資料?(無法復原)')
+  if (r == true) {
+    let patientRef = dbRef(database, '/watermeter/' + pkey + '/')
+    remove(patientRef)
+  }
+}
+
+function storePatient(patient) {
+  let currentUser = getAuth().currentUser.email.split('@')[0]
+  if (currentUser == 'phar.vghtpe') {
+    alert('您的帳號無儲存/修改權限!')
+    return
+  }
+  let pkey = patient.pkey
+  if (!patient.hisid && patient.name == '新病人') {
+    let r = confirm('未輸入姓名及病歷號資訊，資料將會直接刪除')
+    if (r == true) {
+      let patientRef = dbRef(database, '/watermeter/' + pkey + '/')
+      get(patientRef).then(function (snapshot) {
+        remove(patientRef)
+      })
+    }
+    return
+  }
+  let r = confirm('確定要封存此病人資料?(要調閱封存後之資料須請管理員執行)')
+  if (r == true) {
+    let patientRef = dbRef(database, '/watermeter/' + pkey + '/')
+    let storeRef = dbRef(database, '/watermeter_store/')
+    get(patientRef).then(function (snapshot) {
+      let obj = snapshot.val()
+      obj.deleteDate = util.getNow()
+      push(storeRef, obj)
+      remove(patientRef)
+    })
+  }
+}
+
+function setRoute(route) {
+  store.setRoute(route)
+}
+
+function parseUpdate(inputDateTime) {
+  let split = inputDateTime.split(' ')
+  let date = split[0].split('-').map(x => Number(x))
+  date.splice(0, 1)
+  date = date.join('/')
+  let time = split[1].split(':')
+  time.splice(2, 1)
+  time = time.join(':')
+  return date + ' ' + time
+}
+
+function parseSelected(input) {
+  return input.pkey == route.params.pkey
+}
+
+function getCGA(patientData) {
+  let cga = util.getCGA(
+    util.getNow(),
+    patientData.birthdate,
+    patientData.ga_week,
+    patientData.ga_day
+  )
+  if (!cga) return ''
+  return patientData.ga_week + '+' + patientData.ga_day + ' > ' + cga
+}
+
+function condition(patientData) {
+  let wm = patientData.watermeterData
+  wm = wm && wm[0] && wm[0].wm
+  if (wm && wm.bw) {
+    let feed_daily = wm.feed_total / (wm.bw / 1000 + 0.0001)
+    let daily = wm.wm_summary_daily
+    let propotion = feed_daily / 100
+    if (propotion < 0.2) {
+      return 'condition-warn-1'
+    } else if (propotion < 0.4) {
+      return 'condition-warn-2'
+    } else if (propotion < 0.6) {
+      return 'condition-warn-3'
+    } else if (propotion < 0.8) {
+      return 'condition-warn-4'
+    } else {
+      return 'condition-warn-5'
+    }
+  }
+  return 'condition-none'
+}
+
+onBeforeRouteUpdate((to, from, next) => {
+  setRoute(to)
+  if (to.params.pkey && patientList.value.find(x => x.pkey == to.params.pkey)) {
+    next()
+  } else if (!to.params.pkey) {
+    next()
+  } else {
+    next('/watermeter')
+  }
+})
+
+onMounted(() => {
+  setRoute(route)
+  database = getDatabase()
+  let waterMeterRef = dbRef(database, '/watermeter/')
+  onValue(waterMeterRef, function (snapshot) {
+    store.setSnapshot(snapshot.val())
+  })
+})
 </script>
 
 <style scoped lang="scss">
